@@ -1,5 +1,3 @@
-
-const { dirname } = require("path");
 const path = require("path");
 
 module.exports = function (app) {
@@ -7,7 +5,7 @@ module.exports = function (app) {
         res.sendFile(path.join(__dirname, "../public/stats.html"));
     });
 
-    app.get("/workouts", (req, res) => {
+    app.get("/exercise", (req, res) => {
         res.sendFile(path.join(__dirname, "../public/exercise.html"));
     });
 

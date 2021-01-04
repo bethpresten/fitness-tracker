@@ -1,4 +1,4 @@
-const db = require("../public");
+const db = require("../models");
 
 module.exports = function (app) {
     app.get("/api/config", (req, res) => {
@@ -13,6 +13,7 @@ module.exports = function (app) {
     app.get("/api/workouts", (req, res) => {
         db.Workout.find().then((workouts) => {
             res.json(workouts);
+            console.log(workouts);
         });
         // .catch((err)) => {
         //     console.log(err);
@@ -62,4 +63,4 @@ module.exports = function (app) {
             res.json(result);
         });
     });
-}
+};

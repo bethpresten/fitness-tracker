@@ -2,18 +2,19 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
+const logger = require("morgan");
 // 2. Create an instance of Express
 const app = express();
 // 3. Set the PORT
 const PORT = process.env.PORT || 8080;
 
-const db = require("./models");
-
+// const db = require("./models");
+app.use(logger("dev"));
 // 5. Add middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(express.static("./public"))
+app.use(express.static("public"))
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
     useNewUrlParser: true,
