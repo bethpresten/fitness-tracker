@@ -13,7 +13,9 @@ const db = require("./models");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/fitness-tracker", {
+app.use(express.static("./public"))
+
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
@@ -29,6 +31,10 @@ connection.on("connected", () => {
 connection.on("error", (err) => {
     console.log("Mongoose connection error: " + err);
 });
+
+// requiring the api and html routes
+require("./routes/htmlRoutes")(app)
+require("./routes/apiRoutes")(app)
 
 // 4. Listen on the PORT.
 app.listen(PORT, () => {
