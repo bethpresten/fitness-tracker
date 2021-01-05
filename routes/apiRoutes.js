@@ -1,4 +1,6 @@
 const db = require("../models");
+const express = require("express");
+const path = require("path");
 
 module.exports = function (app) {
     app.get("/api/config", (req, res) => {
@@ -18,6 +20,17 @@ module.exports = function (app) {
         // .catch((err)) => {
         //     console.log(err);
         // };
+
+        // delete method: getLastWorkout (see api.js)
+
+
+        // update method that will be addExercise    (see api.js)
+
+
+        //post method that will be createExercise (see api.js)
+
+
+        // getWorkoutsInRange will be a GET method
     });
 
 
