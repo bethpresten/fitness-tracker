@@ -10,18 +10,23 @@ module.exports = function (app) {
     });
 
     app.get("/api/workouts", (req, res) => {
-        db.Workout.find({})
-            .then(workouts => {
-                res.json(workouts)
-            }).catch(err => {
-                console.log(err)
-            });
+        db.Workout.aggregate([
+            {
+                $addFields: {
+                    totalDuration: {
+                        $sum: "$exercises.duration",
+                    },
+                },
+            },
+        ]).then(function (allWorkouts) {
+            res.json(allWorkouts);
+        });
     });
 
     app.post("/api/workouts", ({ body }, res) => {
         db.Workout.create(body)
-            .then(db => {
-                res.json(db);
+            .then(function (allWorkouts) {
+                res.json(allWorkouts);
             })
             .catch(err => {
                 console.log(err);
@@ -29,22 +34,25 @@ module.exports = function (app) {
     });
 
     app.get("/api/workouts/range", (req, res) => {
-        db.Workout.find({})
-            .then(workouts => {
-                res.json(workouts)
-            }).catch((err) => {
-                console.log(err)
-            });
+        db.Workout.aggregate([
+            {
+                $addFields: {
+                    totalDuration: {
+                        $sum: "$exercises.duration",
+                    },
+                },
+            },
+        ]).then(function (allWorkouts) {
+            res.json(allWorkouts);
+        });
     });
 
-    app.put("/api/workouts/:id", (req, res) => {
-        db.Workout.findOneAndUpdate(
-            { _id: req.params.id },
-            { $push: { exercises: req.body } }
-        ).then((workouts) => {
-            res.json(workouts);
-        }).catch((err) => {
-            console.log(err);
+    app.put("/api/workouts/:id", ({ body, params }, res) => {
+        db.Workout.findByIdAndUpdate(
+            params.id,
+            { $push: { exercises: body } },
+        ).then(function (allWorkouts) {
+            res.json(allWorkouts);
         });
     });
 }
