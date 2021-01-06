@@ -6,8 +6,9 @@ const logger = require("morgan");
 const Workout = require("./models/workout");
 
 const app = express();
+const router = require("express").Router();
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 
 
 app.use(logger("dev"));
@@ -17,7 +18,7 @@ app.use(express.json());
 
 app.use(express.static("public"))
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workouts", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
@@ -35,8 +36,12 @@ connection.on("error", (err) => {
 });
 
 // requiring the api and html routes
-require("./routes/htmlRoutes")(app)
-require("./routes/apiRoutes")(app)
+
+const htmlRoutes = require("./routes/htmlRoutes");
+const apiRoutes = require("./routes/apiRoutes");
+
+app.use(htmlRoutes);
+app.use(apiRoutes);
 
 // 4. Listen on the PORT.
 app.listen(PORT, () => {

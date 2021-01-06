@@ -1,15 +1,18 @@
 const db = require("../models/index");
+const Workout = require('../models/workout.js');
+const router = require('express').Router();
 
 module.exports = function (app) {
-    app.get("/api/config", (req, res) => {
+    router.get("/api/config", (req, res) => {
         res.json({
             success: true,
-        }).catch(err => {
-            console.log(err)
-        });
+        })
+        // .catch(err => {
+        //     console.log(err)
+        // });
     });
 
-    app.get("/api/workouts", (req, res) => {
+    router.get("/api/workouts", (req, res) => {
         db.Workout.aggregate([
             {
                 $addFields: {
@@ -23,7 +26,7 @@ module.exports = function (app) {
         });
     });
 
-    app.post("/api/workouts", ({ body }, res) => {
+    router.post("/api/workouts", ({ body }, res) => {
         db.Workout.create(body)
             .then(function (allWorkouts) {
                 res.json(allWorkouts);
@@ -33,7 +36,7 @@ module.exports = function (app) {
             });
     });
 
-    app.get("/api/workouts/range", (req, res) => {
+    router.get("/api/workouts/range", (req, res) => {
         db.Workout.aggregate([
             {
                 $addFields: {
@@ -42,17 +45,22 @@ module.exports = function (app) {
                     },
                 },
             },
-        ]).then(function (allWorkouts) {
-            res.json(allWorkouts);
-        });
+        ]).sort({ _id: -1 })
+            .then(function (allWorkouts) {
+                res.json(allWorkouts);
+                console.log(allWorkouts);
+            })
+            .catch(err => {
+                console.log(err);
+            });
     });
 
-    app.put("/api/workouts/:id", ({ body, params }, res) => {
+    router.put("/api/workouts/:id", ({ body }, res) => {
         db.Workout.findByIdAndUpdate(
-            params.id,
+            req.params.id,
             { $push: { exercises: body } },
         ).then(function (allWorkouts) {
             res.json(allWorkouts);
         });
     });
-}
+};

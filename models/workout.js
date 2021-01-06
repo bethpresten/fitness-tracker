@@ -20,29 +20,34 @@ const WorkoutSchema = new Schema({
         required: "Please enter an exercise name."
       },
       duration: {
-        type: Number,
-        required: "Please enter the exercise duration."
+        type: String,
+        required: false,
       },
       weight: {
-        type: Number,
+        type: String,
+        required: false,
       },
       reps: {
-        type: Number,
+        type: String,
+        required: false,
       },
       sets: {
-        type: Number,
+        type: String,
+        required: false,
       },
-      weight: {
-        type: Number,
+      distance: {
+        type: String,
+        required: false,
       },
     }
-  ]
-},
-  {
-    toJSON: {
-      virtual: true
-    }
-  });
+  ],
+}, { toJSON: { virtual: true } }
+);
+{
+  toJSON: {
+    virtual: true
+  }
+};
 
 WorkoutSchema.virtual("totalDuration").get(function () {
   return this.exercises.reduce((total, exercise) => {
