@@ -1,17 +1,14 @@
 const db = require("../models/index");
 const Workout = require('../models/workout.js');
-// const router = require('express').Router();
 
 module.exports = function (app) {
     app.get("/api/config", (req, res) => {
         res.json({
             success: true,
-        })
-
-        console.log("/api/config route has been hit!");
-        // .catch(err => {
-        //     console.log(err)
-        // });
+        }).catch(err => {
+            console.log(err)
+        });
+        // console.log("/api/config route has been hit!");
     });
 
     app.get("/api/workouts", (req, res) => {
@@ -23,15 +20,15 @@ module.exports = function (app) {
                     },
                 },
             },
-        ]).then(function (allWorkouts) {
-            res.json(allWorkouts);
+        ]).then(function (workouts) {
+            res.json(workouts);
         });
     });
 
-    app.post("/api/workouts", ({ body }, res) => {
-        db.Workout.create(body)
-            .then(function (allWorkouts) {
-                res.json(allWorkouts);
+    app.post("/api/workouts", (req, res) => {
+        db.Workout.create(req.body)
+            .then(function (workouts) {
+                res.json(workouts);
             })
             .catch(err => {
                 console.log(err);
@@ -48,21 +45,22 @@ module.exports = function (app) {
                 },
             },
         ]).sort({ _id: -1 })
-            .then(function (allWorkouts) {
-                res.json(allWorkouts);
-                console.log(allWorkouts);
+            .limit(7)
+            .then(function (workouts) {
+                res.json(workouts);
+                console.log(workouts);
             })
             .catch(err => {
                 console.log(err);
             });
     });
 
-    app.put("/api/workouts/:id", ({ body }, res) => {
+    app.put("/api/workouts/:id", (req, res) => {
         db.Workout.findByIdAndUpdate(
-            id,
-            { $push: { exercises: body } },
-        ).then(function (allWorkouts) {
-            res.json(allWorkouts);
+            req.params.id,
+            { $push: { exercises: req.body } },
+        ).then(function (workouts) {
+            res.json(workouts);
         });
     });
 };
