@@ -22,6 +22,8 @@ module.exports = function (app) {
             },
         ]).then(function (workouts) {
             res.json(workouts);
+        }).catch(err => {
+            console.log(err)
         });
     });
 
