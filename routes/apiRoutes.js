@@ -63,6 +63,8 @@ module.exports = function (app) {
             { $push: { exercises: req.body } },
         ).then(function (workouts) {
             res.json(workouts);
+        }).catch(err => {
+            console.log(err);
         });
     });
 };
